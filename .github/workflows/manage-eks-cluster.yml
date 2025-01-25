@@ -67,9 +67,11 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Debug Environment Variables
-        run: |
-            echo "REGION=${{ env.REGION }}"
+      - name: Extract Region
+        run: echo "REGION=$(echo '${{ github.event.inputs.region }}' | jq -r .identifier)" >> $GITHUB_ENV
+
+      - name: Debug Region
+        run: echo "REGION=$REGION"
 
       - name: Terraform Apply
         id: terraform_apply
