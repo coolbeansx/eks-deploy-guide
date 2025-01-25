@@ -6,7 +6,7 @@ terraform {
     organization = "demosum"
 
     workspaces {
-      name = ""
+      name = "eks-deploy-guide"
     }
   }
 
