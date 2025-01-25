@@ -69,7 +69,7 @@ jobs:
 
       - name: Debug Environment Variables
         run: |
-            echo "AWS_REGION=${{ env.AWS_REGION }}"
+            echo "REGION=${{ env.REGION }}"
 
       - name: Terraform Apply
         id: terraform_apply
