@@ -13,9 +13,9 @@ on:
         description: "Action to perform (apply/destroy)"
         required: true
         default: "apply"
-      context:
+      port_context:
         required: true
-        description: "Port's payload (who triggered, context, etc...)"
+        description: "Port's payload (who triggered, port_context, etc...)"
         type: string
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Create a log message (apply)
         if: ${{ github.event.inputs.action == 'apply' }}
