@@ -31,9 +31,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
       PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
-      CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
-      REGION: ${{ github.event.inputs.region }}
-      ACTION: ${{ github.event.inputs.action }}
       PORT_RUN_ID: ${{ fromJson(inputs.context).runId }}
       
 
@@ -79,17 +76,11 @@ jobs:
           runId: ${{ env.PORT_RUN_ID }}
           logMessage: "Creating ECR repository: ${{ github.event.inputs.repo_name }}"
 
-          
-      - name: Extract Region
-        run: echo "REGION=$(echo '${{ github.event.inputs.region }}' | jq -r .identifier)" >> $GITHUB_ENV
-
-      - name: Debug Region
-        run: echo "REGION=$REGION"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
