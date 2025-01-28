@@ -130,7 +130,7 @@ jobs:
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.CREATOR_TOKEN }}" \
-            -d "{\"name\": \"${{ github.event.inputs.repo_name }}\", \"private\": true, \"description\": \"${{ github.event.inputs.description }}\"}"
+            -d "{\"name\": \"${{ github.event.inputs.repo_name }}\", \"private\": true, \"description\": \"${{ github.event.inputs.description }}\"}" \
             "https://api.github.com/user/repos")
 
           echo "HTTP Status: $HTTP_STATUS"
