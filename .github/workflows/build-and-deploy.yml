@@ -7,16 +7,20 @@ on:
         description: 'Deployment cluster'
         required: true
       context:
-        required: true
+        required: false
         description: "Action and general context (blueprint, run id, etc...)"
         type: string
+      repo_url:
+        required: true
+        description: Repo url for app template
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
-      REPO_URL: ${{ fromJson(inputs.context).entity.properties.url }}
+      REPO_URLS: ${{ fromJson(inputs.context).entity.properties.url }}
+      REPO_URL: "${{ github.event.inputs.repo_name }}"
       TRIGGERED_BY: ${{ fromJson(inputs.context).trigger.by.user.email || github.actor }}
 
     steps:
