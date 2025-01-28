@@ -6,10 +6,7 @@ on:
       cluster:
         description: 'Deployment cluster'
         required: true
-      context:
-        required: false
-        description: "Action and general context (blueprint, run id, etc...)"
-        type: string
+
       repo_url:
         required: true
         description: Repo url for app template
