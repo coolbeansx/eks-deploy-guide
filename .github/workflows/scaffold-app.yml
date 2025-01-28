@@ -51,8 +51,6 @@ jobs:
       - name: Check if Repository Exists
         id: check_repo
         run: |
-          echo "Repository Name: ${{ github.event.inputs.repo_name }}"
-          echo "Description: ${{ github.event.inputs.description }}"
           REPO_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" \
             -X GET \
             -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
@@ -126,6 +124,8 @@ jobs:
         id: create-repo
         if: ${{ env.repo_exists == 'false' }}
         run: |
+          echo "Repository Name: ${{ github.event.inputs.repo_name }}"
+          echo "Description: ${{ github.event.inputs.description }}"
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST \
             -H "Accept: application/vnd.github+json" \
