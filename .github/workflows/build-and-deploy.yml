@@ -63,29 +63,6 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.REPO_NAME }}
       run: |
-        # Build and push image with short commit ID and triggered by as tags
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT
-
-        # Tag image with commit ID and push
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHA
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHA
-
-        # Tag image with triggered by and push
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:actor-${TRIGGERED_BY//[^a-zA-Z0-9]/-}
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:actor-${TRIGGERED_BY//[^a-zA-Z0-9]/-}
-
-        # Tag image with PR ID and push
-        if [ "${{ github.event_name }}" == "pull_request" ]; then
-          PR_ID=$(echo "${{ github.event.pull_request.number }}" | tr -d '/')
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:pr-$PR_ID
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:pr-$PR_ID
-        fi
-
-        # Tag image with workflow ID and push
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:build-${{ github.run_id }}
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:build-${{ github.run_id }}
-        
         # Tag image with latest and push
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
