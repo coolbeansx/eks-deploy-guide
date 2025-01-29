@@ -63,9 +63,9 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.REPO_NAME }}
       run: |
-        # Tag image with latest and push
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$COMMIT_SHORT $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+       docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+
+       docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
     - name: Notify Port
       uses: port-labs/port-github-action@v1
