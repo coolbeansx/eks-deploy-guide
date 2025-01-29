@@ -6,23 +6,27 @@ on:
       cluster:
         description: 'Deployment cluster'
         required: true
-
       repo_url:
+        description: 'Deployment cluster'
         required: true
-        description: Repo url for app template
+      port_payload:
+        required: true
+        description: "Port's payload, including details for who triggered the action and general context (blueprint, run id, etc...)"
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
-      REPO_URLS: ${{ fromJson(inputs.context).entity.properties.url }}
-      REPO_URL: "${{ github.event.inputs.repo_name }}"
-      TRIGGERED_BY: ${{ fromJson(inputs.context).trigger.by.user.email || github.actor }}
+      REPO_URL: ${{ github.event.inputs.repo_url  }} 
+      TRIGGERED_BY: ${{ fromJson(inputs.port_payload).trigger.by.user.email || github.actor }}
 
     steps:
     - name: Extract repository owner and name
       run: |
+        echo "REPO_URL=${REPO_URL}"
+        echo "Cluster=${{ github.event.inputs.cluster  }} "
         repo_owner=$(echo "${REPO_URL}" | awk -F/ '{print $4}')
         repo_name=$(echo "${REPO_URL}" | awk -F/ '{print $5}')
 
@@ -93,7 +97,7 @@ jobs:
         clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
         operation: PATCH_RUN
         baseUrl: https://api.getport.io
-        runId: ${{ fromJson(inputs.context).runId }}
+        runId: ${{ fromJson(inputs.port_payload).context.runId }}
         logMessage: |
           Built and pushed image to ECR
 
@@ -119,8 +123,7 @@ jobs:
         clientId: ${{ secrets.PORT_CLIENT_ID }}
         clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
         operation: PATCH_RUN
-        status: "SUCCESS"
         baseUrl: https://api.getport.io
-        runId: ${{ fromJson(inputs.context).runId }}
+        runId: ${{ fromJson(inputs.port_payload).context.runId }}
         logMessage: |
             Deployed to EKS 
